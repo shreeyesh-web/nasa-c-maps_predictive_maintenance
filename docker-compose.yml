@@ -1,0 +1,67 @@
+name: nasa_project_my
+services:
+  # ── PostgreSQL Database ─────────────────────────────────────
+  postgres:
+    image: postgres:15-alpine
+    container_name: nasa_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+      POSTGRES_DB: nasa  # CHANGED to nasa
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init_db:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d nasa"] # CHANGED to nasa
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── FastAPI ─────────────────────────────────────────────────
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api
+    command: uvicorn python.api:app --host 0.0.0.0 --port 8000
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: nasa  # CHANGED to nasa
+      DB_USER: postgres
+      DB_PASSWORD: postgres123
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  # ── Streamlit Dashboard ─────────────────────────────────────
+  streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile.streamlit
+    container_name: nasa_dashboard
+    command: streamlit run python/stream.py --server.port 8502 --server.address 0.0.0.0
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: nasa  # CHANGED to nasa
+      DB_USER: postgres
+      DB_PASSWORD: postgres123
+    ports:
+      - "8502:8502"
+    volumes:
+      - .:/app
+    depends_on:
+      api:
+        condition: service_started
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

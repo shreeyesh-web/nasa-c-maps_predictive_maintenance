@@ -1,0 +1,29 @@
+# Virtual environment
+venv/
+
+# Model files (too large for GitHub)
+models/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Environment variables
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Plots (optional - you can include these)
+# plots/
+mlruns/
+mlflow.db
+
+models/*.pkl
+models/*.h5
