@@ -38,16 +38,16 @@ Automated testing pipeline using GitHub Actions and a pytest suite to check RUL 
 MODEL EVALUATION METRICS
 
 [XGBoost Classifier]
-  - Accuracy:  99.99%
-  - F1 Score:  0.9997
-  - Recall:    1.0000  -- Caught 100% of anomalies in test split
-  - Precision: 0.9994
+Accuracy: 99.99%
+F1 Score: 0.9997
+Recall: 1.0000 -- Caught 100% of anomalies in test split
+Precision: 0.9994
 
 [LSTM Network]
-  - Accuracy:  98.85%
-  - F1 Score:  0.9615
-  - Recall:    0.9530
-  - Precision: 0.9701
+Accuracy: 98.85%
+F1 Score: 0.9615
+Recall: 0.9530
+Precision: 0.9701
 
 Primary Metric Selection: Treated Recall as the critical benchmark to minimize undetected critical field failures; 
 the XGBoost classifier achieved a recall score of 1.00 on test data.
